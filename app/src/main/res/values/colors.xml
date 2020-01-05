@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#5900b3</color>
+    <color name="colorPrimaryDark">#400080</color>
+    <color name="colorAccent">#5900b3</color>
+    <color name="orange">#5900b3</color>
+    <color name="orangeDifuminated">#FCDAAC</color>
+    <color name="white">#ffffff</color>
+    <color name="white_dark">#E5E5E5</color>
+    <color name="GrisClaro">#B3B3B3</color>
+</resources>

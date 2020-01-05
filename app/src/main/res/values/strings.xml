@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Cicerone Guias</string>
+    <string name="Cicerone">Cicerone</string>
+    <string name="correo">Correo</string>
+    <string name="Contraseña">Contraseña</string>
+    <string name="iniciar_sesion">Iniciar Sesión</string>
+    <string name="olvidaste_tu_contraseña">Olvidaste tu contraseña?</string>
+    <string name="registrate">Regístrate</string>
+    <string name="cicerone_guias">Cicerone Guías</string>
+    <string name="id_facebook">1047997608877722</string>
+
+</resources>
