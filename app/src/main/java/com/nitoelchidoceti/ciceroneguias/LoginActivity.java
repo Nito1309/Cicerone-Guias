@@ -3,6 +3,7 @@ package com.nitoelchidoceti.ciceroneguias;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -43,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText txtEmail, txtName, txtPass;
     public String ID;
     private ImageView imgPortada;
+    private Button btnIniciarSesion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +57,17 @@ public class LoginActivity extends AppCompatActivity {
         textInputPassword.setNextFocusDownId(R.id.btnLogin);
         imgPortada = findViewById(R.id.imglogin);
         loginButtonFb = findViewById(R.id.login_button_fb);
+        btnIniciarSesion = findViewById(R.id.btnLogin);
         txtName = findViewById(R.id.etxt_contraseña_login);
         txtEmail = findViewById(R.id.etxt_correo_login);
         txtPass = findViewById(R.id.etxt_contraseña_login);
         callbackManager = CallbackManager.Factory.create();
-
+        btnIniciarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmInput();
+            }
+        });
         checkLoginStatus();
 
         loginButtonFb.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -78,6 +86,41 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void comprobarCredenciales() {
+        final String url = "http://ec2-54-245-18-174.us-west-2.compute.amazonaws.com/Cicerone/PHP/Guia/login.php?correo=" + txtEmail.getText().toString().trim() +
+                "&contraseña=" + txtPass.getText().toString().trim();
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONObject loginTurista = response.getJSONObject(0);
+                            if (loginTurista.getString("success").equals("false")) {
+                                Toast.makeText(LoginActivity.this, "Verifique sus credenciales.", LENGTH_SHORT).show();
+                            } else {
+                                ID = loginTurista.getString("id");
+                                Global.getObject().setId(ID);
+                                iniciarSesion();
+                            }
+
+                        } catch (JSONException e) {
+                            Toast.makeText(LoginActivity.this, e.getMessage(), LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(LoginActivity.this, "Si estas concectado a la red? Error: " + error.getMessage(), LENGTH_SHORT).show();
+                        System.out.println("Checa: "+ error.getMessage());
+                    }
+                });
+        RequestQueue ejecuta = Volley.newRequestQueue(LoginActivity.this);
+        ejecuta.add(jsonArrayRequest);
     }
 
 
@@ -129,44 +172,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void launchBottomNavActivity(final View vista) {
 
-        final String url = "http://ec2-54-245-18-174.us-west-2.compute.amazonaws.com/Cicerone/PHP/login.php?correo=" + txtEmail.getText().toString() +
-                "&contraseña=" + txtPass.getText().toString();
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
-                url,
-                null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            JSONObject loginTurista = response.getJSONObject(0);
-                            if (loginTurista.getString("success").equals("false")) {
-                                Toast.makeText(vista.getContext(), "Verifique sus credenciales.", LENGTH_SHORT).show();
-                            } else {
-                                //Intent intent = new Intent(vista.getContext(),BottomNav.class);
-                                ID = loginTurista.getString("id");
-                                Global.getObject().setId(ID);
-                                Global.getObject().setNombre(loginTurista.getString("Nombre"));
-                                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                                //startActivity(intent);
-                            }
 
-                        } catch (JSONException e) {
-
-                        }
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(vista.getContext(), "Si estas concectado a la red? Error: " + error.getMessage(), LENGTH_SHORT).show();
-                        System.out.println("Checa: "+ error.getMessage());
-                    }
-                });
-        RequestQueue ejecuta = Volley.newRequestQueue(vista.getContext());
-        ejecuta.add(jsonArrayRequest);
+    private void iniciarSesion() {
+        Intent intent = new Intent(LoginActivity.this,BottomNav.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     private boolean validateEmail() {
@@ -199,17 +210,11 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void confirmInput(View view) {//METODO ONCLICK DEL BOTON INICIAR SESIÓN
+    public void confirmInput() {//METODO ONCLICK DEL BOTON INICIAR SESIÓN
         if (!validateEmail() | !validatePassword()) {
             return;
         }
-
-        String input = "Email: " + textInputEmail.getEditText().getText().toString();
-        input += "\n";
-        input += "Password: " + textInputPassword.getEditText().getText().toString();
-
-        //Toast.makeText(this,input, LENGTH_SHORT).show();
-        launchBottomNavActivity(view);
+        comprobarCredenciales();
     }
 
     public void launch_get_email(View view) {

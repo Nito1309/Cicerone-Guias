@@ -132,9 +132,7 @@
                         android:layout_marginRight="50dp"
                         android:background="@drawable/button_background"
                         android:backgroundTint="@color/orange"
-
                         android:fontFamily="@font/source_sans_pro_bold"
-                        android:onClick="confirmInput"
                         android:src="@drawable/button_background"
                         android:text="@string/iniciar_sesion"
                         android:textColor="@color/white"
