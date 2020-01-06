@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class PojoGuia implements Serializable {
 
-    private int Id;
+    private String Id;
     private String nombre,
             descripcion, telefono, correo,horario, duracion,nombreDelSitio,FK_Sitio, fotografia;
     private Double[] costos;
@@ -14,7 +14,7 @@ public class PojoGuia implements Serializable {
     private ArrayList<String> imagenes;
 
     public PojoGuia() {
-        Id = 0;
+        Id = "";
         nombre = "";
         duracion = "";
         nombreDelSitio = "";
@@ -74,11 +74,11 @@ public class PojoGuia implements Serializable {
         this.titulos = titulos;
     }
 
-    public int getId() {
+    public String getId() {
         return Id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         Id = id;
     }
 
