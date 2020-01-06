@@ -1,22 +1,15 @@
 package com.nitoelchidoceti.ciceroneguias.Fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,7 +22,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.google.android.material.textfield.TextInputLayout;
 import com.nitoelchidoceti.ciceroneguias.Adapters.AdapterDeComentarios;
 import com.nitoelchidoceti.ciceroneguias.Adapters.AdapterDeViewPager;
 import com.nitoelchidoceti.ciceroneguias.Global.Global;
@@ -64,7 +56,6 @@ public class AccountFragment extends Fragment {
 
         inicializacion();
         consultaComentarios();
-        //llenarInformacion();
         calcularCalificacion();
         return view;
     }
@@ -94,13 +85,59 @@ public class AccountFragment extends Fragment {
         consultaIdiomas();
         consultaTitulos();
         pojoGuia.setId(String.valueOf(Global.getObject().getId()));
-
-        Glide.with(this).load(pojoGuia.getFotografia()).into(fotoPerfil);
+        obtenerInfGuia();
 
         viewPager = view.findViewById(R.id.viewPagerGuia);
 
         imagenes = new ArrayList<>();
         obtenerImagenes();
+    }
+
+    private void obtenerInfGuia() {
+        final String url = "http://ec2-54-245-18-174.us-west-2.compute.amazonaws.com/Cicerone/PHP/Guia/infDeCuenta.php?id=" +
+                pojoGuia.getId();
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            agregarInfGuia(response);
+                        } catch (JSONException e) {
+                            Toast.makeText(viewPager.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ImageView imageView = view.findViewById(R.id.viewPagerGuia);
+                imageView.setImageResource(R.drawable.img_catedral_premium);
+                Toast.makeText(view.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        RequestQueue queue = Volley.newRequestQueue(view.getContext());
+        queue.add(jsonArrayRequest);
+    }
+
+    private void agregarInfGuia(JSONArray response) throws JSONException {
+        JSONObject objeto;
+        objeto = response.getJSONObject(0);
+        pojoGuia.setNombre(objeto.getString("Nombre"));
+        pojoGuia.setTelefono(objeto.getString("Telefono"));
+        pojoGuia.setDuracion(objeto.getString("Duracion"));
+        pojoGuia.setCorreo(objeto.getString("Correo"));
+        pojoGuia.setFotografia(objeto.getString("Fotografia"));
+        pojoGuia.setNombreDelSitio(objeto.getString("Sitio"));
+        pojoGuia.setHorario("De "+objeto.getString("Horario_Inicio")+"hrs a "+objeto.getString("Horario_Final")+"hrs");
+        pojoGuia.setFK_Sitio(objeto.getString("FK_Sitio"));
+        Double[] aux = new Double[3];
+        aux[0] = Double.valueOf(objeto.getString("Ninos"));
+        aux[1] = Double.valueOf(objeto.getString("Especial"));
+        aux[2] = Double.valueOf(objeto.getString("Adultos"));
+        pojoGuia.setCostos(aux);
+        llenarInformacion();
     }
 
     private void obtenerImagenes( ) {
@@ -317,7 +354,6 @@ public class AccountFragment extends Fragment {
             aux2+="* "+pojoGuia.getIdiomas().get(i)+"\n";
         }
         idiomasGuia.setText(aux2);
-
         horarioGuia.setText(pojoGuia.getHorario());
         duracionTourGuia.setText("Aproximadamente "+pojoGuia.getDuracion()+ " Hrs.");
         Double[] array;
@@ -325,6 +361,8 @@ public class AccountFragment extends Fragment {
         costosGuia.setText("Niños: " + array[0] + " MXN" + "\n" +
                 "Estudiantes o 3ra Edad: " + array[1] + " MXN" + "\n" +
                 "Adultos: " + array[2] + " MXN");
+        fotoPerfil.setBackground(null);
+        Glide.with(view.getContext()).load(pojoGuia.getFotografia()).into(fotoPerfil);
     }
 
 }

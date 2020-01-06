@@ -126,7 +126,6 @@ public class PojoGuia implements Serializable {
         return horario;
     }
 
-
     public String getFK_Sitio() {
         return FK_Sitio;
     }
