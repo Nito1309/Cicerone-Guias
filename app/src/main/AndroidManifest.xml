@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ChatActivity"></activity>
+        <activity android:name=".GetMailForgotPassword"></activity>
+        <activity android:name=".RecoverPasswordActivity" />
+        <activity android:name=".ChatActivity" />
         <activity android:name=".BottomNav" />
         <activity android:name=".LoginActivity">
             <intent-filter>

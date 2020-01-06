@@ -14,5 +14,6 @@
     <string name="c_digo_qr">Código QR</string>
     <string name="multimedia">Multimedia</string>
     <string name="calificacion">Calificación</string>
+    <string name="registrar">Registrar</string>
 
 </resources>

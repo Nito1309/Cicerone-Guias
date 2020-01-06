@@ -41,5 +41,10 @@ dependencies {
     //diseño bonito para chat
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
 
+    //Enviar Correo
+    implementation files('libs/activation.jar')
+    implementation files('libs/additionnal.jar')
+    implementation files('libs/mail.jar')
+
 }
 apply plugin: 'com.google.gms.google-services'

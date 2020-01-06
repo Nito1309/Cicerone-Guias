@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -45,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     public String ID;
     private ImageView imgPortada;
     private Button btnIniciarSesion;
+    private TextView olvidoDeContra;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,13 @@ public class LoginActivity extends AppCompatActivity {
         btnIniciarSesion = findViewById(R.id.btnLogin);
         txtName = findViewById(R.id.etxt_contraseña_login);
         txtEmail = findViewById(R.id.etxt_correo_login);
+        olvidoDeContra = findViewById(R.id.txtOlvidoDeContra);
+        olvidoDeContra.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launch_get_email();
+            }
+        });
         txtPass = findViewById(R.id.etxt_contraseña_login);
         callbackManager = CallbackManager.Factory.create();
         btnIniciarSesion.setOnClickListener(new View.OnClickListener() {
@@ -218,8 +227,8 @@ public class LoginActivity extends AppCompatActivity {
         comprobarCredenciales();
     }
 
-    public void launch_get_email(View view) {
-        //Intent getEMailAct = new Intent(this, GetMailForgotPassword.class);
-        //startActivity(getEMailAct);
+    public void launch_get_email() {
+        Intent getEMailAct = new Intent(this, GetMailForgotPassword.class);
+        startActivity(getEMailAct);
     }
 }

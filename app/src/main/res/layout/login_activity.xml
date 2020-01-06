@@ -153,14 +153,13 @@
                         android:layout_marginBottom="20dp">
 
                             <TextView
+                                android:id="@+id/txtOlvidoDeContra"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/source_sans_pro"
                                 android:text="@string/olvidaste_tu_contraseña"
-
                                 android:textColor="@color/orange"
                                 android:textStyle="italic"
-                                android:onClick="launch_get_email"
                                 android:layout_marginLeft="20dp"
                                 android:layout_centerInParent="true"
                                 />
