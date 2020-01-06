@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "41684525003",
+    "firebase_url": "https://cicerone-258620.firebaseio.com",
+    "project_id": "cicerone-258620",
+    "storage_bucket": "cicerone-258620.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41684525003:android:5796c694444ffad18be04e",
+        "android_client_info": {
+          "package_name": "com.nitoelchidoceti.ciceroneapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "41684525003-bicuk17g4k6o94qrk7lm019ntjgp12na.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnvCv8ymTYe2PghMwDnoVsPtneQFN0-uo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "41684525003-bicuk17g4k6o94qrk7lm019ntjgp12na.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41684525003:android:339f866000f574838be04e",
+        "android_client_info": {
+          "package_name": "com.nitoelchidoceti.ciceroneguias"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "41684525003-bicuk17g4k6o94qrk7lm019ntjgp12na.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnvCv8ymTYe2PghMwDnoVsPtneQFN0-uo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "41684525003-bicuk17g4k6o94qrk7lm019ntjgp12na.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

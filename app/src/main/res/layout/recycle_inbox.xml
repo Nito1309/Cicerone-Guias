@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="3dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:elevation="3dp"
+        >
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgPerfil"
+            android:layout_width="80dp"
+            android:layout_height="100dp"
+            android:background="@drawable/img_catedral_premium"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtNombreInbox"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:fontFamily="@font/source_sans_pro_bold"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:text="Guia Juan Pablo"
+                android:textAlignment="textStart"
+                android:padding="3dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/txtMsgInbox"
+                    android:layout_width="220dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/source_sans_pro"
+                    android:textColor="#2E2E2E"
+                    android:textSize="16sp"
+                    android:text="Hola..."
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:padding="5dp"
+
+                    />
+
+                <TextView
+                    android:id="@+id/txtFechaInbox"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/source_sans_pro"
+                    android:textColor="#2E2E2E"
+                    android:textSize="14sp"
+                    android:text="19:23"
+                    android:layout_marginTop="20dp"
+                    android:textAlignment="textEnd"
+                    android:padding="5dp"
+                    android:layout_marginRight="5dp"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#D6D6D6"
+        />
+
+</androidx.cardview.widget.CardView>

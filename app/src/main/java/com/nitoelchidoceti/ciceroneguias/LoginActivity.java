@@ -104,6 +104,7 @@ public class LoginActivity extends AppCompatActivity {
                             } else {
                                 ID = loginTurista.getString("id");
                                 Global.getObject().setId(ID);
+                                Global.getObject().setNombre(loginTurista.getString("Nombre"));
                                 iniciarSesion();
                             }
 
