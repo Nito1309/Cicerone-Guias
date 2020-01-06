@@ -8,5 +8,9 @@
     <string name="registrate">Regístrate</string>
     <string name="cicerone_guias">Cicerone Guías</string>
     <string name="id_facebook">1047997608877722</string>
+    <string name="mensajes">Mensajes</string>
+    <string name="agenda">Agenda</string>
+    <string name="cuenta">Cuenta</string>
+    <string name="c_digo_qr">Código QR</string>
 
 </resources>

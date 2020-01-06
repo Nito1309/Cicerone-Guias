@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:title="@string/c_digo_qr"
+        android:id="@+id/panic_button"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_panic_button"
+        android:iconTint="@color/white"
+
+        />
+
+</menu>
