@@ -12,5 +12,7 @@
     <string name="agenda">Agenda</string>
     <string name="cuenta">Cuenta</string>
     <string name="c_digo_qr">Código QR</string>
+    <string name="multimedia">Multimedia</string>
+    <string name="calificacion">Calificación</string>
 
 </resources>
