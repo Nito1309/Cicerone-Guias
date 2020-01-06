@@ -66,7 +66,7 @@ public class MessagesFragment extends Fragment {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                                     mensaje = child.getValue(MensajeRecibir.class);
-                                    adapterInbox.addMensaje(mensaje);
+                                        adapterInbox.addMensaje(mensaje);
                                 }
                             }
 
@@ -79,9 +79,10 @@ public class MessagesFragment extends Fragment {
                 }
             }
 
+
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
@@ -106,6 +107,9 @@ public class MessagesFragment extends Fragment {
         }
         databaseConfiguration();
         recycleConfiguration();
+        if (mensaje==null){
+            Toast.makeText(view.getContext(), "No cuentas con mensajes", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void launchChat(int pos) {
