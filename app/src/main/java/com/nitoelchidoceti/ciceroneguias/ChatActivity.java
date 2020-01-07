@@ -224,12 +224,16 @@ public class ChatActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
         if(id == R.id.panic_button){
-            //launchPanicActivity();
+            launchPanicActivity();
         }
         if (id == R.id.faqs){
             launchFaqsActivity();
         }
         return true;
+    }
+    private void launchPanicActivity() {
+        Intent intent = new Intent(this,PanicButtonActivity.class);
+        startActivity(intent);
     }
 
     private void launchFaqsActivity() {

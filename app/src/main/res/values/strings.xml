@@ -16,5 +16,6 @@
     <string name="calificacion">Calificación</string>
     <string name="registrar">Registrar</string>
     <string name="cerrar_sesi_n">Cerrar Sesión</string>
+    <string name="cu_l_es_su_emergencia">¿Cuál es su emergencia?</string>
 
 </resources>

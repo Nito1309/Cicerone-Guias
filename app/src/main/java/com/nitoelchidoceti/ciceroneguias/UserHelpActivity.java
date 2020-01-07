@@ -101,14 +101,13 @@ public class UserHelpActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.panic_button:
-                //launchReporProblem();
+                launchPanicActivity();
                 break;
         }
         return true;
     }
-
-    private void launchReporProblem() {
-        //Intent IlaunchReportProblem = new Intent(UserHelpActivity.this,ReportProblemActivity.class);
-        //startActivity(IlaunchReportProblem);
+    private void launchPanicActivity() {
+        Intent intent = new Intent(this,PanicButtonActivity.class);
+        startActivity(intent);
     }
 }
