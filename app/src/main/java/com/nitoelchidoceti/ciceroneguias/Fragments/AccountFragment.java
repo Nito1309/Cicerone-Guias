@@ -1,9 +1,11 @@
 package com.nitoelchidoceti.ciceroneguias.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.nitoelchidoceti.ciceroneguias.Adapters.AdapterDeComentarios;
 import com.nitoelchidoceti.ciceroneguias.Adapters.AdapterDeViewPager;
 import com.nitoelchidoceti.ciceroneguias.Global.Global;
+import com.nitoelchidoceti.ciceroneguias.LoginActivity;
 import com.nitoelchidoceti.ciceroneguias.POJOS.PojoComentario;
 import com.nitoelchidoceti.ciceroneguias.POJOS.PojoGuia;
 import com.nitoelchidoceti.ciceroneguias.R;
@@ -47,6 +50,7 @@ public class AccountFragment extends Fragment {
     ImageView fotoPerfil;
     ArrayList<String> imagenes;
     ViewPager viewPager;
+    Button btnCerrarSesion;
 
     private View view;
     @Nullable
@@ -64,7 +68,13 @@ public class AccountFragment extends Fragment {
      * y los configura
      */
     private void inicializacion() {
-
+        btnCerrarSesion = view.findViewById(R.id.btnCerrarSesion);
+        btnCerrarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cerrarSesion();
+            }
+        });
         calificacionGuia = view.findViewById(R.id.txtCalificacionNumeroGuia);
         comentarios = new ArrayList<>();
         recycleComentarioGuia = view.findViewById(R.id.recycleComentariosGuia);
@@ -91,6 +101,11 @@ public class AccountFragment extends Fragment {
 
         imagenes = new ArrayList<>();
         obtenerImagenes();
+    }
+
+    private void cerrarSesion() {
+        Intent intent = new Intent(view.getContext(), LoginActivity.class);
+        startActivity(intent);
     }
 
     private void obtenerInfGuia() {
