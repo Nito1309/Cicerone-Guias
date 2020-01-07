@@ -8,6 +8,16 @@
     android:orientation="vertical"
     tools:context=".ChatActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_chat"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/orange"
+        android:elevation="3dp"
+        app:navigationContentDescription="@string/Cicerone"
+        app:title="@string/Cicerone"
+        app:titleMarginStart="30dp"
+        app:titleTextColor="@color/white" />
     <TextView
         android:id="@+id/txtNombreChat"
         android:layout_width="match_parent"

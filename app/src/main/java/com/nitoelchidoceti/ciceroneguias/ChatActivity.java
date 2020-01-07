@@ -3,6 +3,7 @@ package com.nitoelchidoceti.ciceroneguias;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +13,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -57,6 +60,8 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         nombreDestinatario = (String) getIntent().getSerializableExtra("Turista");
         idDestinatario = (String) getIntent().getSerializableExtra("ID");
+        Toolbar toolbar = findViewById(R.id.toolbar_chat);
+        setSupportActionBar(toolbar);
         instancias();
     }
 
@@ -207,5 +212,28 @@ public class ChatActivity extends AppCompatActivity {
         }else{
             return true;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_actionbar,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if(id == R.id.panic_button){
+            //launchPanicActivity();
+        }
+        if (id == R.id.faqs){
+            launchFaqsActivity();
+        }
+        return true;
+    }
+
+    private void launchFaqsActivity() {
+        Intent intent = new Intent(this,UserHelpActivity.class);
+        startActivity(intent);
     }
 }

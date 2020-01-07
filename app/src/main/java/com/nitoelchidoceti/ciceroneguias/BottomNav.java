@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,6 +70,14 @@ public class BottomNav extends AppCompatActivity {
         if(id == R.id.panic_button){
             //launchPanicActivity();
         }
+        if (id == R.id.faqs){
+            launchFaqsActivity();
+        }
         return true;
+    }
+
+    private void launchFaqsActivity() {
+        Intent intent = new Intent(this,UserHelpActivity.class);
+        startActivity(intent);
     }
 }

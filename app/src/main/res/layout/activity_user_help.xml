@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".UserHelpActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarUserHelp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/orange"
+        app:navigationContentDescription="@string/Cicerone"
+        app:title="@string/Cicerone"
+        app:titleMarginStart="30dp"
+        app:titleTextColor="@color/white"
+        android:elevation="1dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:fontFamily="@font/source_sans_pro_bold"
+        android:textSize="22sp"
+        android:gravity="center"
+        android:text="¿En que podemos ayudarte?"
+        android:background="@drawable/custom_recycle_user_help"
+        android:elevation="1dp"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:textStyle="bold"
+        android:layout_marginHorizontal="5dp"/>
+
+    <ExpandableListView
+        android:id="@+id/expandableTextViewUserHelp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/custom_recycle_user_help"
+        android:elevation="1dp"
+        android:layout_marginTop="10dp"
+        />
+</LinearLayout>

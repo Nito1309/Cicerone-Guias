@@ -107,9 +107,6 @@ public class MessagesFragment extends Fragment {
         }
         databaseConfiguration();
         recycleConfiguration();
-        if (mensaje==null){
-            Toast.makeText(view.getContext(), "No cuentas con mensajes", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void launchChat(int pos) {
