@@ -1,15 +1,21 @@
 package com.nitoelchidoceti.ciceroneguias;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -49,40 +55,64 @@ public class PanicButtonActivity extends AppCompatActivity {
         fila1Columna1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                makePhoneCall(botones.get(0));
             }
         });
         fila1Columna2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                makePhoneCall(botones.get(1));
             }
         });
         fila2Columna1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                makePhoneCall(botones.get(2));
             }
         });
 
         fila2Columna2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                makePhoneCall(botones.get(3));
             }
         });
         fila3Columna1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                makePhoneCall(botones.get(4));
             }
         });
         fila3Columna2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                makePhoneCall(botones.get(5));
             }
         });
+    }
+
+    private void makePhoneCall(Boton button) {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(PanicButtonActivity.this,
+                    new String[]{Manifest.permission.CALL_PHONE}, 1);
+
+        } else {
+            String dial = "tel:" + button.getTelefono();
+            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            }else {
+                Toast.makeText(this, "No activaste el permiso :c", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void inicializaciones() {
