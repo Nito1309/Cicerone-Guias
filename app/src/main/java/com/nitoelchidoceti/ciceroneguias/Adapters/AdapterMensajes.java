@@ -62,7 +62,7 @@ public class AdapterMensajes extends RecyclerView.Adapter<AdapterMensajes.Holder
         holder.getHora().setText(sdf.format(date));*/
         PrettyTime prettyTime = new PrettyTime(new Date(), Locale.getDefault());
         holder.getHora().setText(prettyTime.format(date));
-    }
+}
 
     @Override
     public int getItemCount() {
