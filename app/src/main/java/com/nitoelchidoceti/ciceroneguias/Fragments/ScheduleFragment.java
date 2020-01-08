@@ -2,12 +2,15 @@ package com.nitoelchidoceti.ciceroneguias.Fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,7 +37,8 @@ import java.util.Date;
 public class ScheduleFragment extends Fragment {
     private View view;
     private ArrayList<PojoReservacion> reservaciones = new ArrayList<>();
-    RecyclerView recycleReservaciones ;
+    private RecyclerView recycleReservaciones ;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,7 +46,9 @@ public class ScheduleFragment extends Fragment {
         recycleReservaciones = view.findViewById(R.id.recycle_schedule);
         recycleReservaciones.setLayoutManager(new LinearLayoutManager(view.getContext(),
                 LinearLayoutManager.VERTICAL, false));
+
         consultarReservaciones();
+
         return view;
     }
 
@@ -95,7 +101,13 @@ public class ScheduleFragment extends Fragment {
             PojoReservacion reservacion = new PojoReservacion(fecha,titulo,registro,telefono) ;
             reservaciones.add(reservacion);
         }
-        adapterDeReservaciones = new AdapterDeReservaciones(reservaciones,view.getContext());
+        adapterDeReservaciones = new AdapterDeReservaciones(reservaciones, view.getContext(), new AdapterDeReservaciones.OnItemClickListener() {
+            @Override
+            public void OnItemClick(final int position) {
+                final PojoReservacion reservacion = reservaciones.get(position);
+
+            }
+        });
         recycleReservaciones.setAdapter(adapterDeReservaciones);
     }
 }
