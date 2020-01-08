@@ -1,6 +1,8 @@
 package com.nitoelchidoceti.ciceroneguias.Adapters;
 
 import android.content.Context;
+import android.text.Layout;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -30,7 +32,7 @@ public class AdapterDeReservaciones extends RecyclerView.Adapter<AdapterDeReserv
     @NonNull
     @Override
     public AdapterDeReservaciones.FichaHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View vista = View.inflate(parent.getContext(), R.layout.card_view_schedule, null);
+        View vista = LayoutInflater.from(context).inflate(R.layout.card_view_schedule,parent,false);
         FichaHolder respecto = new FichaHolder(vista);
         return respecto;
     }
