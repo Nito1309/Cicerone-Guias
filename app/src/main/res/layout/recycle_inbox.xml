@@ -13,7 +13,7 @@
         >
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imgPerfil"
+            android:id="@+id/imgPerfilInbox"
             android:layout_width="80dp"
             android:layout_height="100dp"
             android:background="@drawable/img_catedral_premium"

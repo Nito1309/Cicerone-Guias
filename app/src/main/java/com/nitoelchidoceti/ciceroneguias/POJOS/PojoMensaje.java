@@ -1,26 +1,30 @@
 package com.nitoelchidoceti.ciceroneguias.POJOS;
 
 public class PojoMensaje {
-    private String mensaje,Nombre,type_mensaje,urlFoto, idUsuario,nombreDestinatario;
+    private String mensaje,Nombre,type_mensaje,urlFoto, idUsuario,nombreDestinatario, fotoPerfilDestinatario;;
 
     public PojoMensaje() {
     }
 
-    public PojoMensaje(String mensaje, String nombre, String type_mensaje, String urlFoto, String idUsuario, String nombreDestinatario) {
+    public PojoMensaje(String mensaje, String nombre, String type_mensaje, String urlFoto,
+                       String idUsuario, String nombreDestinatario, String fotoPerfilDestinatario) {
         this.mensaje = mensaje;
         Nombre = nombre;
         this.type_mensaje = type_mensaje;
         this.urlFoto = urlFoto;
         this.idUsuario = idUsuario;
         this.nombreDestinatario = nombreDestinatario;
+        this.fotoPerfilDestinatario = fotoPerfilDestinatario;
     }
 
-    public PojoMensaje(String mensaje, String nombre, String type_mensaje, String idUsuario, String nombreDestinatario) {
+    public PojoMensaje(String mensaje, String nombre, String type_mensaje, String idUsuario,
+                       String nombreDestinatario, String fotoPerfilDestinatario) {
         this.mensaje = mensaje;
         Nombre = nombre;
         this.type_mensaje = type_mensaje;
         this.idUsuario = idUsuario;
         this.nombreDestinatario = nombreDestinatario;
+        this.fotoPerfilDestinatario = fotoPerfilDestinatario;
     }
 
     public String getMensaje() {
@@ -69,5 +73,13 @@ public class PojoMensaje {
 
     public void setNombreDestinatario(String nombreDestinatario) {
         this.nombreDestinatario = nombreDestinatario;
+    }
+
+    public String getFotoPerfilDestinatario() {
+        return fotoPerfilDestinatario;
+    }
+
+    public void setFotoPerfilDestinatario(String fotoPerfilDestinatario) {
+        this.fotoPerfilDestinatario = fotoPerfilDestinatario;
     }
 }

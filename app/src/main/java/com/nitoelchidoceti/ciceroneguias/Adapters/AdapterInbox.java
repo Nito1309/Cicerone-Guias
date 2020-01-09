@@ -4,11 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.nitoelchidoceti.ciceroneguias.Fragments.MessagesFragment;
 import com.nitoelchidoceti.ciceroneguias.Global.Global;
 import com.nitoelchidoceti.ciceroneguias.POJOS.MensajeRecibir;
@@ -64,7 +66,7 @@ public class AdapterInbox extends RecyclerView.Adapter<AdapterInbox.HolderMensaj
         }
 
         holder.getMensaje().setText(mensajes.get(position).getMensaje());
-        //Glide.with(context).load(mensajes.get(position).getUrlFoto()).into(holder.imgMensaje);
+        //Glide.with(context).load(mensajes.get(position).get.into(holder.imgMensaje);
         Long codigoHora = mensajes.get(position).getHora();
         Date date = new Date(codigoHora);
         PrettyTime prettyTime = new PrettyTime(new Date(), Locale.getDefault());
@@ -79,7 +81,7 @@ public class AdapterInbox extends RecyclerView.Adapter<AdapterInbox.HolderMensaj
 
     public class HolderMensajes extends RecyclerView.ViewHolder {
         private TextView nombre, hora, mensaje;
-        //public ImageView imgMensaje;
+        private ImageView imgMensaje;
 
 
         public HolderMensajes(@NonNull View itemView) {
@@ -87,7 +89,7 @@ public class AdapterInbox extends RecyclerView.Adapter<AdapterInbox.HolderMensaj
             nombre = itemView.findViewById(R.id.txtNombreInbox);
             hora = itemView.findViewById(R.id.txtFechaInbox);
             mensaje = itemView.findViewById(R.id.txtMsgInbox);
-            //imgMensaje= itemView.findViewById(R.id.imagenChat);
+            imgMensaje= itemView.findViewById(R.id.imgPerfilInbox);
         }
 
         public void onClickFake(final int posicion, final OnItemClickListener listener) {
@@ -121,6 +123,14 @@ public class AdapterInbox extends RecyclerView.Adapter<AdapterInbox.HolderMensaj
 
         public void setMensaje(TextView mensaje) {
             this.mensaje = mensaje;
+        }
+
+        public ImageView getImgMensaje() {
+            return imgMensaje;
+        }
+
+        public void setImgMensaje(ImageView imgMensaje) {
+            this.imgMensaje = imgMensaje;
         }
     }
 }

@@ -17,9 +17,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -38,6 +45,10 @@ import com.nitoelchidoceti.ciceroneguias.POJOS.MensajeEnviar;
 import com.nitoelchidoceti.ciceroneguias.POJOS.MensajeRecibir;
 import com.nitoelchidoceti.ciceroneguias.POJOS.PojoMensaje;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ChatActivity extends AppCompatActivity {
 
     private com.google.android.material.textfield.TextInputEditText etxtMensaje;
@@ -51,6 +62,8 @@ public class ChatActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private FirebaseStorage storage;
     private StorageReference storageReference;
+
+    private String foto;
 
     private static final int PHOTO_SEND = 1;
 
@@ -78,6 +91,7 @@ public class ChatActivity extends AppCompatActivity {
         recycleConfiguration();
         onClickEnviarMensaje();
         onClickEnviarImagen();
+        obtenerInfGuia();
     }
 
     private void onClickEnviarImagen() {
@@ -91,6 +105,33 @@ public class ChatActivity extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(intent, "Selecciona una imagen"), PHOTO_SEND);//1 = imagen
             }
         });
+    }
+
+    private void obtenerInfGuia() {
+        final String url = "http://ec2-54-245-18-174.us-west-2.compute.amazonaws.com/Cicerone/PHP/Guia/infDeCuenta.php?id=" +
+                Global.getObject().getId();
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(0);
+                            foto = jsonObject.getString("Fotografia");
+                        } catch (JSONException e) {
+                            Toast.makeText(ChatActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        RequestQueue queue = Volley.newRequestQueue(ChatActivity.this);
+        queue.add(jsonArrayRequest);
     }
 
     @Override
@@ -120,7 +161,7 @@ public class ChatActivity extends AppCompatActivity {
                                 Global.getObject().getNombre(),"2",
                                 downloadUri.toString(),
                                 "guia"+Global.getObject().getId(),
-                                nombreDestinatario, ServerValue.TIMESTAMP);
+                                nombreDestinatario,foto, ServerValue.TIMESTAMP);
                         databaseReference.push().setValue(mensaje);
                     }else {
                         Toast.makeText(ChatActivity.this, "No se ha podido subir la imagen correctamente.", Toast.LENGTH_SHORT).show();
@@ -137,7 +178,7 @@ public class ChatActivity extends AppCompatActivity {
                 if (etxtMensaje.getText().length()!=0){
                     databaseReference.push().setValue(new MensajeEnviar(etxtMensaje.getText().toString()
                             , Global.getObject().getNombre(), "1",
-                            "guia"+Global.getObject().getId(),nombreDestinatario,ServerValue.TIMESTAMP));
+                            "guia"+Global.getObject().getId(),nombreDestinatario,foto,ServerValue.TIMESTAMP));
                     etxtMensaje.setText("");
                 }
             }
