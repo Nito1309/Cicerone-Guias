@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +52,7 @@ public class AccountFragment extends Fragment {
     ArrayList<String> imagenes;
     ViewPager viewPager;
     Button btnCerrarSesion;
+    ImageButton oneStar, twoStar, threeStar, fourStar, fiveStar;
 
     private View view;
     @Nullable
@@ -87,6 +89,11 @@ public class AccountFragment extends Fragment {
         horarioGuia = view.findViewById(R.id.txtHorarioGuia);
         costosGuia = view.findViewById(R.id.txtCostosTourGuia);
         idiomasGuia=view.findViewById(R.id.txtIdiomasGuia);
+        oneStar = view.findViewById(R.id.UnaEstrellaGuia);
+        twoStar = view.findViewById(R.id.DosEstrellasGuia);
+        threeStar = view.findViewById(R.id.TresEstrellasGuia);
+        fourStar = view.findViewById(R.id.CuatroEstrellasGuia);
+        fiveStar = view.findViewById(R.id.CincoEstrellasGuia);
 
         fotoPerfil = view.findViewById(R.id.imgFotoPerfilGuia);
 
@@ -281,6 +288,10 @@ public class AccountFragment extends Fragment {
                             JSONObject jsonObject;
                             jsonObject = response.getJSONObject(0);
                             calificacionGuia.setText(jsonObject.getString("Calificacion"));
+                            String s = jsonObject.getString("Calificacion").substring(1,3);
+                            Boolean mediaEstrella = esMediaEstrella(s);
+
+                            stars(jsonObject.getString("Calificacion").substring(0,1),mediaEstrella);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -293,6 +304,73 @@ public class AccountFragment extends Fragment {
         });
         RequestQueue queue = Volley.newRequestQueue(view.getContext());
         queue.add(jsonArrayRequest);
+    }
+    private void stars(String numero,Boolean mediaEstrella) {
+        switch (numero) {
+            case "1":
+                oneStar.setBackgroundResource(R.drawable.ic_one_star);
+                if (mediaEstrella==true){
+                    twoStar.setBackgroundResource(R.drawable.ic_half_star);
+                }else {
+                    twoStar.setBackgroundResource(R.drawable.ic__empty_star);
+                }
+
+                threeStar.setBackgroundResource(R.drawable.ic__empty_star);
+                fourStar.setBackgroundResource(R.drawable.ic__empty_star);
+                fiveStar.setBackgroundResource(R.drawable.ic__empty_star);
+                break;
+            case "2":
+                oneStar.setBackgroundResource(R.drawable.ic_one_star);
+                twoStar.setBackgroundResource(R.drawable.ic_one_star);
+                if (mediaEstrella==true){
+                    threeStar.setBackgroundResource(R.drawable.ic_half_star);
+                }else {
+                    threeStar.setBackgroundResource(R.drawable.ic__empty_star);
+                }
+                fourStar.setBackgroundResource(R.drawable.ic__empty_star);
+                fiveStar.setBackgroundResource(R.drawable.ic__empty_star);
+                break;
+            case "3":
+                oneStar.setBackgroundResource(R.drawable.ic_one_star);
+                twoStar.setBackgroundResource(R.drawable.ic_one_star);
+                threeStar.setBackgroundResource(R.drawable.ic_one_star);
+                if (mediaEstrella==true){
+                    fourStar.setBackgroundResource(R.drawable.ic_half_star);
+                }else {
+                    fourStar.setBackgroundResource(R.drawable.ic__empty_star);
+                }
+                fiveStar.setBackgroundResource(R.drawable.ic__empty_star);
+                break;
+            case "4":
+                oneStar.setBackgroundResource(R.drawable.ic_one_star);
+                twoStar.setBackgroundResource(R.drawable.ic_one_star);
+                threeStar.setBackgroundResource(R.drawable.ic_one_star);
+                fourStar.setBackgroundResource(R.drawable.ic_one_star);
+                if (mediaEstrella==true){
+                    fiveStar.setBackgroundResource(R.drawable.ic_half_star);
+                }else {
+                    fiveStar.setBackgroundResource(R.drawable.ic__empty_star);
+                }
+                break;
+            case "5":
+                oneStar.setBackgroundResource(R.drawable.ic_one_star);
+                twoStar.setBackgroundResource(R.drawable.ic_one_star);
+                threeStar.setBackgroundResource(R.drawable.ic_one_star);
+                fourStar.setBackgroundResource(R.drawable.ic_one_star);
+                fiveStar.setBackgroundResource(R.drawable.ic_one_star);
+                break;
+        }
+    }
+    private Boolean esMediaEstrella(String s) {
+        switch (s){
+            case ".3":
+            case ".4":
+            case ".7":
+            case ".6":
+            case ".5":
+                return true;
+        }
+        return false;
     }
 
     /**
