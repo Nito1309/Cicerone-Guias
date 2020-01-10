@@ -39,7 +39,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/source_sans_pro_bold"
-                            android:text="Guia Juan Pablo"
                             android:layout_weight="1"/>
 
                         <TextView
@@ -47,7 +46,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/source_sans_pro"
-                            android:text="19:01"
                             />
 
                     </LinearLayout>
@@ -57,7 +55,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/source_sans_pro"
-                        android:text="Hola que tal como te va?"
                         android:textSize="17sp"
                         android:layout_weight="1"
                         />

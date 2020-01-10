@@ -23,7 +23,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/source_sans_pro_bold"
-                android:text="Reservacion con  Juan Pablo "
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
@@ -36,7 +35,6 @@
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/source_sans_pro"
                 android:maxLength="25"
-                android:text="El 2020/01/01 a las 19:00"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
