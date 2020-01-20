@@ -70,13 +70,13 @@ public class ScheduleFragment extends Fragment {
                             agregarReservaciones(response);
 
                         } catch (JSONException e) {
-                            Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(view.getContext(), "error: "+error.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(view.getContext(), "error: "+error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
         RequestQueue queue = Volley.newRequestQueue(view.getContext());

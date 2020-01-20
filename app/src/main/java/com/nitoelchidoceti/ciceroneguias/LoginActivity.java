@@ -2,6 +2,7 @@ package com.nitoelchidoceti.ciceroneguias;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,7 +28,10 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.nitoelchidoceti.ciceroneguias.Global.Global;
 
 import org.json.JSONArray;
@@ -47,30 +51,13 @@ public class LoginActivity extends AppCompatActivity {
     private ImageView imgPortada;
     private Button btnIniciarSesion;
     private TextView olvidoDeContra;
+    private Boolean autorizado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
-        textInputEmail = findViewById(R.id.text_input_email);
-        textInputPassword = findViewById(R.id.text_input_password);
-        textInputPassword.setCounterMaxLength(14);
-        textInputPassword.setCounterEnabled(true);
-        textInputPassword.setNextFocusDownId(R.id.btnLogin);
-        imgPortada = findViewById(R.id.imglogin);
-        loginButtonFb = findViewById(R.id.login_button_fb);
-        btnIniciarSesion = findViewById(R.id.btnLogin);
-        txtName = findViewById(R.id.etxt_contraseña_login);
-        txtEmail = findViewById(R.id.etxt_correo_login);
-        olvidoDeContra = findViewById(R.id.txtOlvidoDeContra);
-        olvidoDeContra.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launch_get_email();
-            }
-        });
-        txtPass = findViewById(R.id.etxt_contraseña_login);
-        callbackManager = CallbackManager.Factory.create();
+        inicializaciones();
         btnIniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,6 +84,60 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void inicializaciones() {
+        autorizado=false;
+        textInputEmail = findViewById(R.id.text_input_email);
+        textInputPassword = findViewById(R.id.text_input_password);
+        textInputPassword.setCounterMaxLength(14);
+        textInputPassword.setCounterEnabled(true);
+        textInputPassword.setNextFocusDownId(R.id.btnLogin);
+        imgPortada = findViewById(R.id.imglogin);
+        loginButtonFb = findViewById(R.id.login_button_fb);
+        btnIniciarSesion = findViewById(R.id.btnLogin);
+        txtName = findViewById(R.id.etxt_contraseña_login);
+        txtEmail = findViewById(R.id.etxt_correo_login);
+        olvidoDeContra = findViewById(R.id.txtOlvidoDeContra);
+        olvidoDeContra.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launch_get_email();
+            }
+        });
+        txtPass = findViewById(R.id.etxt_contraseña_login);
+        callbackManager = CallbackManager.Factory.create();
+    }
+
+    private void actualizarToken(final String id) {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                Log.d("NOTICIAS","Token: "+ instanceIdResult.getToken());
+                consultaActualizarToken(id,instanceIdResult.getToken());
+            }
+        });
+    }
+
+    private void consultaActualizarToken(String ID,String token) {
+        final String url = "http://ec2-54-245-18-174.us-west-2.compute.amazonaws.com/" +
+                "Cicerone/PHP/Guia/actualizarToken.php?id="+ID+"&token="+token;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(LoginActivity.this, " Error: " + error.getMessage(), LENGTH_SHORT).show();
+                    }
+                });
+        RequestQueue ejecuta = Volley.newRequestQueue(LoginActivity.this);
+        ejecuta.add(jsonArrayRequest);
+    }
+
     private void comprobarCredenciales() {
         final String url = "http://ec2-54-245-18-174.us-west-2.compute.amazonaws.com/Cicerone/PHP/Guia/login.php?correo=" + txtEmail.getText().toString().trim() +
                 "&contraseña=" + txtPass.getText().toString().trim();
@@ -114,7 +155,8 @@ public class LoginActivity extends AppCompatActivity {
                                 ID = loginTurista.getString("id");
                                 Global.getObject().setId(ID);
                                 Global.getObject().setNombre(loginTurista.getString("Nombre"));
-                                iniciarSesion();
+                                actualizarToken(ID);
+                                comprobarAutorizacion(ID);
                             }
 
                         } catch (JSONException e) {
@@ -127,6 +169,42 @@ public class LoginActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(LoginActivity.this, "Si estas concectado a la red? Error: " + error.getMessage(), LENGTH_SHORT).show();
                         System.out.println("Checa: "+ error.getMessage());
+                    }
+                });
+        RequestQueue ejecuta = Volley.newRequestQueue(LoginActivity.this);
+        ejecuta.add(jsonArrayRequest);
+    }
+
+    private void launchAutorizacionActivity() {
+        Intent intent = new Intent(LoginActivity.this,AutorizationActivity.class);
+        startActivity(intent);
+    }
+
+    private void comprobarAutorizacion(String ID) {
+        final String url = "http://ec2-54-245-18-174.us-west-2.compute.amazonaws.com/" +
+                "Cicerone/PHP/Guia/comprobarAutorizado.php?id="+ID;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(0);
+                            if (jsonObject.getString("success").equals("true")) {
+                                iniciarSesion();
+                            }else {
+                                launchAutorizacionActivity();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(LoginActivity.this, " Error: " + error.getMessage(), LENGTH_SHORT).show();
                     }
                 });
         RequestQueue ejecuta = Volley.newRequestQueue(LoginActivity.this);
@@ -181,8 +259,6 @@ public class LoginActivity extends AppCompatActivity {
             loadUserProfile(AccessToken.getCurrentAccessToken());
         }
     }
-
-
 
     private void iniciarSesion() {
         Intent intent = new Intent(LoginActivity.this,BottomNav.class);

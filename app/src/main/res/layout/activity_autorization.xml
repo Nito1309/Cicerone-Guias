@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".RecoverPasswordActivity">
-
+    tools:context=".AutorizationActivity">
     <ImageView
         android:id="@+id/rectimage"
         android:layout_width="match_parent"
@@ -29,7 +28,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fontFamily="@font/source_sans_pro"
-    android:text="Ingresa el código de recuperación que se envió a tu correo electrónico."
+    android:text="Ingresa tu código de autorizacion de Guía."
     android:textSize="20sp"
     android:layout_marginTop="30dp"
     android:layout_marginHorizontal="25dp"
@@ -46,7 +45,7 @@
         >
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etxtVerificationCode"
+            android:id="@+id/etxtCodigoAut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
@@ -61,18 +60,18 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/source_sans_pro"
                 android:hint="Código"
-                android:inputType="textCapCharacters"
                 android:textColor="#696969"
                 android:textColorHint="#AFAFAF"
                 android:textSize="20sp"
-                android:maxLength="8"
+                android:maxLength="12"
+                android:text="DeI1Djom0OD2"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
     </RelativeLayout>
 
     <Button
-        android:id="@+id/btnVerificationCode"
+        android:id="@+id/btnVerificar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/button_background"
@@ -84,7 +83,7 @@
         android:textStyle="bold"
         android:layout_marginTop="120dp"
         android:layout_marginHorizontal="50dp"
-        android:onClick="launchLogin2"/>
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -92,7 +91,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
         android:fontFamily="@font/source_sans_pro"
-        android:onClick="launchLogin2"
         android:text="@string/iniciar_sesion"
         android:textColor="@color/orange"
         android:textStyle="italic" />

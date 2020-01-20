@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "41684525003-lc9u5tmj3ca4cn9bkqmk9r5b9ulngoag.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nitoelchidoceti.ciceroneapp",
+            "certificate_hash": "fc82f2875ff054f70cc3c72e30663f06eaa6e933"
+          }
+        },
+        {
           "client_id": "41684525003-bicuk17g4k6o94qrk7lm019ntjgp12na.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -43,6 +51,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "41684525003-nljsd1muka87g6ir4l7ba5pcp8d8056f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nitoelchidoceti.ciceroneguias",
+            "certificate_hash": "fc82f2875ff054f70cc3c72e30663f06eaa6e933"
+          }
+        },
         {
           "client_id": "41684525003-bicuk17g4k6o94qrk7lm019ntjgp12na.apps.googleusercontent.com",
           "client_type": 3
