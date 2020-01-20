@@ -1,5 +1,6 @@
 package com.nitoelchidoceti.ciceroneguias.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,6 +26,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.login.LoginManager;
 import com.nitoelchidoceti.ciceroneguias.Adapters.AdapterDeComentarios;
 import com.nitoelchidoceti.ciceroneguias.Adapters.AdapterDeViewPager;
 import com.nitoelchidoceti.ciceroneguias.Global.Global;
@@ -111,8 +117,28 @@ public class AccountFragment extends Fragment {
     }
 
     private void cerrarSesion() {
-        Intent intent = new Intent(view.getContext(), LoginActivity.class);
-        startActivity(intent);
+        if (AccessToken.getCurrentAccessToken() == null) {
+            Intent launchLoginFromAccount = new Intent(view.getContext(),LoginActivity.class);
+            launchLoginFromAccount.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(launchLoginFromAccount);
+            // already logged out
+        }else {
+            disconnectFromFacebook(view.getContext());
+        }
+    }
+
+    public void disconnectFromFacebook(final Context context) {
+
+        new GraphRequest(AccessToken.getCurrentAccessToken(), "/me/permissions/", null, HttpMethod.DELETE, new GraphRequest
+                .Callback() {
+            @Override
+            public void onCompleted(GraphResponse graphResponse) {
+                LoginManager.getInstance().logOut();
+                Intent launchLoginFromAccount = new Intent(context,LoginActivity.class);
+                launchLoginFromAccount.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(launchLoginFromAccount);
+            }
+        }).executeAsync();
     }
 
     private void obtenerInfGuia() {
@@ -455,7 +481,11 @@ public class AccountFragment extends Fragment {
                 "Estudiantes o 3ra Edad: " + array[1] + " MXN" + "\n" +
                 "Adultos: " + array[2] + " MXN");
         fotoPerfil.setBackground(null);
-        Glide.with(view.getContext()).load(pojoGuia.getFotografia()).into(fotoPerfil);
+        if (Global.getObject().getImagen() != null){
+            Glide.with(view.getContext()).load(Global.getObject().getImagen()).into(fotoPerfil);
+        }else {
+            Glide.with(view.getContext()).load(pojoGuia.getFotografia()).into(fotoPerfil);
+        }
     }
 
 }

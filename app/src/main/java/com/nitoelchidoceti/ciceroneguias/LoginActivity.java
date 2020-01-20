@@ -38,6 +38,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 import static android.widget.Toast.LENGTH_SHORT;
 
 
@@ -64,8 +66,8 @@ public class LoginActivity extends AppCompatActivity {
                 confirmInput();
             }
         });
+        loginButtonFb.setPermissions(Arrays.asList("email","public_profile"));
         checkLoginStatus();
-
         loginButtonFb.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -227,7 +229,6 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "User Loged Out", Toast.LENGTH_SHORT).show();
             } else {
                 loadUserProfile(currentAccessToken);
-                Toast.makeText(LoginActivity.this, "Entró aquí", LENGTH_SHORT).show();
             }
         }
     };
@@ -238,10 +239,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onCompleted(JSONObject object, GraphResponse response) { //OBTENIENDO LOS STRINGS PREVIAMENTE DEFINIDOS
                 try {
-                    String first_name = object.getString("first_name");
-                    String last_name = object.getString("last_name");
+                    //String first_name = object.getString("first_name");
+                    //String last_name = object.getString("last_name");
 
-                    Toast.makeText(LoginActivity.this, "Bienvenido: " + first_name, LENGTH_SHORT);
+                    String email = object.getString("email");
+                    String id = object.getString("id");
+                    Global.getObject().setImagen("https://graph.facebook.com/"+id+"/picture?type=normal");
+                    comprobarCorreo(email);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(LoginActivity.this, e.getMessage(), LENGTH_SHORT).show();
@@ -249,9 +253,47 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         Bundle paraemters = new Bundle();
-        paraemters.putString("fields", "first_name, last_name");//LO QUE SE VA A OBTENER DE FACEBOOK
+        paraemters.putString("fields", "first_name, last_name, email");//LO QUE SE VA A OBTENER DE FACEBOOK
         request.setParameters(paraemters);
         request.executeAsync();
+    }
+
+    private void comprobarCorreo(String correOngas) {
+        final String url = "http://ec2-54-245-18-174.us-west-2.compute.amazonaws.com/" +
+                "Cicerone/PHP/Guia/comprobarCorreo.php?correo="+ correOngas;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(0);
+                            if (jsonObject.getString("success").equals("true")){
+                                Intent intent = new Intent(LoginActivity.this,BottomNav.class);
+                                ID=jsonObject.getString("id");
+                                Global.getObject().setId(ID);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }else {
+                                Toast.makeText(LoginActivity.this,
+                                        "Su correo no esta registrado en Cicerone", Toast.LENGTH_LONG).show();
+
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(jsonArrayRequest);
     }
 
     private void checkLoginStatus() {
