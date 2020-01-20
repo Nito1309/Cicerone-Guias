@@ -244,7 +244,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     String email = object.getString("email");
                     String id = object.getString("id");
-                    Global.getObject().setImagen("https://graph.facebook.com/"+id+"/picture?type=normal");
+                    Global.getObject().setImagen("https://graph.facebook.com/"+id+"/picture?type=large");
                     comprobarCorreo(email);
                 } catch (JSONException e) {
                     e.printStackTrace();

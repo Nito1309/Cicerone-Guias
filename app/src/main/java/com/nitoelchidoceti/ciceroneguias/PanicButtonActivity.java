@@ -1,6 +1,7 @@
 package com.nitoelchidoceti.ciceroneguias;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -48,7 +49,6 @@ public class PanicButtonActivity extends AppCompatActivity {
         setContentView(R.layout.activity_panic_button);
         inicializaciones();
         obtenerBotones();
-        onClicks();
     }
 
     private void onClicks() {
@@ -89,6 +89,14 @@ public class PanicButtonActivity extends AppCompatActivity {
                 makePhoneCall(botones.get(5));
             }
         });
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(PanicButtonActivity.this,
+                    new String[]{Manifest.permission.CALL_PHONE}, 1);
+
+        }
+
     }
 
     private void makePhoneCall(Boton button) {
@@ -173,6 +181,7 @@ public class PanicButtonActivity extends AppCompatActivity {
         fila3Columna1.setText(objeto.getString("Nombre"));
         objeto = response.getJSONObject(5);
         fila3Columna2.setText(objeto.getString("Nombre"));
+        onClicks();
     }
 
     @Override
