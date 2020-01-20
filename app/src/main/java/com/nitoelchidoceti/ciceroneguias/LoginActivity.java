@@ -32,6 +32,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.nitoelchidoceti.ciceroneguias.Global.Global;
 
 import org.json.JSONArray;
@@ -109,7 +110,12 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
     }
 
+    /**
+     * Obtiene el token localmente y manda llamar la funcion que la actualiza en la db
+     * @param id
+     */
     private void actualizarToken(final String id) {
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
             @Override
             public void onSuccess(InstanceIdResult instanceIdResult) {
@@ -119,6 +125,11 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * actualiza el token de firebase de notificaciones a la db de amazon
+     * @param ID
+     * @param token
+     */
     private void consultaActualizarToken(String ID,String token) {
         final String url = "http://ec2-54-245-18-174.us-west-2.compute.amazonaws.com/" +
                 "Cicerone/PHP/Guia/actualizarToken.php?id="+ID+"&token="+token;
@@ -140,6 +151,9 @@ public class LoginActivity extends AppCompatActivity {
         ejecuta.add(jsonArrayRequest);
     }
 
+    /**
+     * comprueba las credenciales de los edit text
+     */
     private void comprobarCredenciales() {
         final String url = "http://ec2-54-245-18-174.us-west-2.compute.amazonaws.com/Cicerone/PHP/Guia/login.php?correo=" + txtEmail.getText().toString().trim() +
                 "&contraseña=" + txtPass.getText().toString().trim();
@@ -258,6 +272,10 @@ public class LoginActivity extends AppCompatActivity {
         request.executeAsync();
     }
 
+    /**
+     * comprueba el correo recibido por facebook
+     * @param correOngas
+     */
     private void comprobarCorreo(String correOngas) {
         final String url = "http://ec2-54-245-18-174.us-west-2.compute.amazonaws.com/" +
                 "Cicerone/PHP/Guia/comprobarCorreo.php?correo="+ correOngas;
@@ -271,11 +289,11 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             JSONObject jsonObject = response.getJSONObject(0);
                             if (jsonObject.getString("success").equals("true")){
-                                Intent intent = new Intent(LoginActivity.this,BottomNav.class);
+
                                 ID=jsonObject.getString("id");
                                 Global.getObject().setId(ID);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
+                                actualizarToken(ID);
+                                comprobarAutorizacion(ID);
                             }else {
                                 Toast.makeText(LoginActivity.this,
                                         "Su correo no esta registrado en Cicerone", Toast.LENGTH_LONG).show();

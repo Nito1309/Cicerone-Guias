@@ -1,16 +1,19 @@
 package com.nitoelchidoceti.ciceroneguias.Fragments;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.PopupMenu;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.nitoelchidoceti.ciceroneguias.Adapters.AdapterDeReservaciones;
+import com.nitoelchidoceti.ciceroneguias.ChatActivity;
 import com.nitoelchidoceti.ciceroneguias.Global.Global;
 import com.nitoelchidoceti.ciceroneguias.POJOS.PojoReservacion;
 import com.nitoelchidoceti.ciceroneguias.R;
@@ -93,21 +97,57 @@ public class ScheduleFragment extends Fragment {
 
             JSONObject objeto;
             objeto = response.getJSONObject(i);
-            String fecha,titulo,telefono,registro;
+            String fecha,nombre,telefono,registro;
             fecha = objeto.getString("Fecha");
-            titulo = "Reservación con "+objeto.getString("Nombre");
+            nombre = objeto.getString("Nombre");
             telefono = objeto.getString("Telefono");
             registro= objeto.getString("PK_Registro");
-            PojoReservacion reservacion = new PojoReservacion(fecha,titulo,registro,telefono) ;
+            PojoReservacion reservacion = new PojoReservacion(fecha,nombre,registro,telefono) ;
             reservaciones.add(reservacion);
         }
         adapterDeReservaciones = new AdapterDeReservaciones(reservaciones, view.getContext(), new AdapterDeReservaciones.OnItemClickListener() {
             @Override
             public void OnItemClick(final int position) {
                 final PojoReservacion reservacion = reservaciones.get(position);
+            }
+        }, new AdapterDeReservaciones.OnMenuItemClickListener() {
+            @Override
+            public void OnMenuItemClick(int popMenuPosition,int itemPosition) {
+                switch (popMenuPosition){
+                    case 1://LLAMADA
+                        if (ContextCompat.checkSelfPermission(view.getContext(),
+                                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(getActivity(),
+                                    new String[]{Manifest.permission.CALL_PHONE}, 1);
+
+                            if (ContextCompat.checkSelfPermission(view.getContext(),
+                                    Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                Toast.makeText(view.getContext(), "Tienes que habilitar el permiso para poder llamar", Toast.LENGTH_SHORT).show();
+                            }else {
+                                String dial = "tel:" + reservaciones.get(itemPosition).getTelefono();
+                                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+                            }
+                        }else {
+                            String dial = "tel:" + reservaciones.get(itemPosition).getTelefono();
+                            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+                        }
+
+                    case 2://MENSAJE
+                        launchSendMessage(reservaciones.get(itemPosition).getRegistroTurista(),
+                                reservaciones.get(itemPosition).getNombre());
+                }
+
+
 
             }
         });
         recycleReservaciones.setAdapter(adapterDeReservaciones);
+    }
+
+    private void launchSendMessage(String registroTurista, String nombre) {
+        Intent intent = new Intent(view.getContext(), ChatActivity.class);
+        intent.putExtra("Turista",nombre);
+        intent.putExtra("ID", registroTurista);
+        startActivity(intent);
     }
 }

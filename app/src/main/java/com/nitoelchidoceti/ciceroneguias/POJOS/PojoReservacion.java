@@ -1,21 +1,21 @@
 package com.nitoelchidoceti.ciceroneguias.POJOS;
 
 public class PojoReservacion {
-    private String fecha, titulo, registroTurista, telefono;
+    private String fecha, nombre, registroTurista, telefono;
 
-    public PojoReservacion(String fecha, String titulo, String registroTurista, String telefono) {
+    public PojoReservacion(String fecha, String nombre, String registroTurista, String telefono) {
         this.fecha = fecha;
-        this.titulo = titulo;
+        this.nombre = nombre;
         this.registroTurista = registroTurista;
         this.telefono = telefono;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getFecha() {

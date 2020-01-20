@@ -4,8 +4,12 @@
 
     <item android:title="Llamar al turista "
         android:id="@+id/itemLlamada"
+        android:icon="@drawable/ic_phone_call"
+
         />
     <item android:title="Enviar mensaje al turista"
         android:id="@+id/itemMensaje"
+        android:icon="@drawable/ic_message"
+
         />
 </menu>
