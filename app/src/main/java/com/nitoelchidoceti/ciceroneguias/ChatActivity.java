@@ -1,5 +1,19 @@
 package com.nitoelchidoceti.ciceroneguias;
 
+import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,25 +22,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -50,6 +51,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ChatActivity extends AppCompatActivity {
 
     private com.google.android.material.textfield.TextInputEditText etxtMensaje;
@@ -67,6 +71,8 @@ public class ChatActivity extends AppCompatActivity {
     private String foto;
 
     private static final int PHOTO_SEND = 1;
+    private final static String Url = "https://fcm.googleapis.com/fcm/send";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,10 +193,76 @@ public class ChatActivity extends AppCompatActivity {
                     databaseReference.push().setValue(new MensajeEnviar(etxtMensaje.getText().toString()
                             , Global.getObject().getNombre(), "1",
                             "guia"+Global.getObject().getId(),nombreDestinatario,foto,ServerValue.TIMESTAMP));
-                    etxtMensaje.setText("");
+                    obtenerToken();
                 }
             }
         });
+    }
+
+    private void obtenerToken() {
+        final String url = "http://ec2-54-245-18-174.us-west-2.compute.amazonaws.com/" +
+                "Cicerone/PHP/Guia/obtenerToken.php?id="+idDestinatario;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(0);
+                            if (jsonObject.getString("success").equals("true")) {
+                                mandarNotificacion(jsonObject.getString("token"));
+                            }else {
+                                etxtMensaje.setText("");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ChatActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(jsonArrayRequest);
+    }
+
+    private void mandarNotificacion(String token) throws JSONException {
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JSONObject mainObj = new JSONObject();
+        mainObj.put("to", token);
+        Log.d("NOTICIAS","notificacion token:"+token+"\n");
+        JSONObject notificationObj = new JSONObject();
+        notificationObj.put("title", "Nuevo mensaje de " + Global.getObject().getNombre());
+        notificationObj.put("body", etxtMensaje.getText().toString());
+        mainObj.put("notification", notificationObj);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Url,
+                mainObj,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ChatActivity.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> header = new HashMap<>();
+                header.put("content-type", "application/json");
+                header.put("authorization", "key=AIzaSyBhgDb3RGS8SPavXMQDQ95z59vOTQ0wjrg");
+                return header;
+            }
+        };
+        requestQueue.add(request);
+        etxtMensaje.setText("");
     }
 
     private void recycleConfiguration() {
