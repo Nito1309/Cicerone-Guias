@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -98,6 +99,7 @@ public class ChatActivity extends AppCompatActivity {
         btnEnviarImagen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);//pedir obtener todos archivos
                 intent.setType("image/jpeg");//configurar para que solo sean fotos
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);//lo agregas al intent para enviar
@@ -139,6 +141,11 @@ public class ChatActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         //cuando la imagen se selecciona correctamente y cuando el resultado se reciba bien
         if (requestCode == PHOTO_SEND && resultCode == RESULT_OK) {
+            final ProgressDialog progressDialog = new ProgressDialog(ChatActivity.this);
+            progressDialog.setTitle("Subiendo Imagen...");
+            progressDialog.setMessage("Por favor espere.");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
             Uri uri = data.getData();//subir la img a la db
             storageReference = storage.getReference("imagenes_chat");
             final StorageReference imagenReferencia = storageReference.child(uri.getLastPathSegment());//key de nuestra foto
@@ -157,12 +164,13 @@ public class ChatActivity extends AppCompatActivity {
                     if (task.isSuccessful()){
                         Uri downloadUri = task.getResult();
                         PojoMensaje mensaje = new MensajeEnviar(
-                                "",
+                                "Imagen:",
                                 Global.getObject().getNombre(),"2",
                                 downloadUri.toString(),
                                 "guia"+Global.getObject().getId(),
                                 nombreDestinatario,foto, ServerValue.TIMESTAMP);
                         databaseReference.push().setValue(mensaje);
+                        progressDialog.dismiss();
                     }else {
                         Toast.makeText(ChatActivity.this, "No se ha podido subir la imagen correctamente.", Toast.LENGTH_SHORT).show();
                     }
