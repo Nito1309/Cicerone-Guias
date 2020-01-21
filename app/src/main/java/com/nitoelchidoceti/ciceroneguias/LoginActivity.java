@@ -292,6 +292,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 ID=jsonObject.getString("id");
                                 Global.getObject().setId(ID);
+                                Global.getObject().setNombre(jsonObject.getString("Nombre"));
                                 actualizarToken(ID);
                                 comprobarAutorizacion(ID);
                             }else {
@@ -322,7 +323,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void iniciarSesion() {
         Intent intent = new Intent(LoginActivity.this,BottomNav.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        finish();
         startActivity(intent);
     }
 

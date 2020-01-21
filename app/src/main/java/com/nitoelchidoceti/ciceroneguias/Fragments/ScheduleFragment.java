@@ -131,10 +131,11 @@ public class ScheduleFragment extends Fragment {
                             String dial = "tel:" + reservaciones.get(itemPosition).getTelefono();
                             startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
                         }
-
+                        break;
                     case 2://MENSAJE
                         launchSendMessage(reservaciones.get(itemPosition).getRegistroTurista(),
                                 reservaciones.get(itemPosition).getNombre());
+                        break;
                 }
 
 

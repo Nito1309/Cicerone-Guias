@@ -81,7 +81,7 @@ public class AutorizationActivity extends AppCompatActivity {
 
     private void iniciarSesion() {
         Intent intent = new Intent(AutorizationActivity.this,BottomNav.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        finish();
         startActivity(intent);
     }
 }

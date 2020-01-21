@@ -67,8 +67,7 @@ public class AccountFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_account,container,false);
 
         inicializacion();
-        consultaComentarios();
-        calcularCalificacion();
+
         return view;
     }
     /**
@@ -100,26 +99,21 @@ public class AccountFragment extends Fragment {
         threeStar = view.findViewById(R.id.TresEstrellasGuia);
         fourStar = view.findViewById(R.id.CuatroEstrellasGuia);
         fiveStar = view.findViewById(R.id.CincoEstrellasGuia);
-
-        fotoPerfil = view.findViewById(R.id.imgFotoPerfilGuia);
-
-        //POJO GUIA
-        pojoGuia = new PojoGuia();
-        consultaIdiomas();
-        consultaTitulos();
-        pojoGuia.setId(String.valueOf(Global.getObject().getId()));
-        obtenerInfGuia();
-
         viewPager = view.findViewById(R.id.viewPagerGuia);
-
+        fotoPerfil = view.findViewById(R.id.imgFotoPerfilGuia);
         imagenes = new ArrayList<>();
-        obtenerImagenes();
+        pojoGuia = new PojoGuia();
+        //POJO GUIA
+        pojoGuia.setId(String.valueOf(Global.getObject().getId()));
+
+        consultaTitulos();
+
     }
 
     private void cerrarSesion() {
         if (AccessToken.getCurrentAccessToken() == null) {
             Intent launchLoginFromAccount = new Intent(view.getContext(),LoginActivity.class);
-            launchLoginFromAccount.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+            getActivity().finish();
             startActivity(launchLoginFromAccount);
             // already logged out
         }else {
@@ -152,6 +146,10 @@ public class AccountFragment extends Fragment {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
+
+                            obtenerImagenes();
+                            consultaComentarios();
+                            calcularCalificacion();
                             agregarInfGuia(response);
                         } catch (JSONException e) {
                             Toast.makeText(viewPager.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -227,6 +225,7 @@ public class AccountFragment extends Fragment {
                     public void onResponse(JSONArray response) {
                         try {
                             agregarTitulosAlPojo(response);
+                            consultaIdiomas();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -251,6 +250,7 @@ public class AccountFragment extends Fragment {
                     public void onResponse(JSONArray response) {
                         try {
                             agregarIdiomasAlPojo(response);
+                            obtenerInfGuia();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
