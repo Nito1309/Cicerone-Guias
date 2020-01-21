@@ -170,13 +170,14 @@ public class ChatActivity extends AppCompatActivity {
                     if (task.isSuccessful()){
                         Uri downloadUri = task.getResult();
                         PojoMensaje mensaje = new MensajeEnviar(
-                                "Imagen:",
+                                "Imagen",
                                 Global.getObject().getNombre(),"2",
                                 downloadUri.toString(),
                                 "guia"+Global.getObject().getId(),
                                 nombreDestinatario,foto, ServerValue.TIMESTAMP);
                         databaseReference.push().setValue(mensaje);
                         progressDialog.dismiss();
+                        obtenerToken(mensaje.getMensaje());
                     }else {
                         Toast.makeText(ChatActivity.this, "No se ha podido subir la imagen correctamente.", Toast.LENGTH_SHORT).show();
                     }
@@ -193,13 +194,14 @@ public class ChatActivity extends AppCompatActivity {
                     databaseReference.push().setValue(new MensajeEnviar(etxtMensaje.getText().toString()
                             , Global.getObject().getNombre(), "1",
                             "guia"+Global.getObject().getId(),nombreDestinatario,foto,ServerValue.TIMESTAMP));
-                    obtenerToken();
+                    obtenerToken(etxtMensaje.getText().toString());
+                    etxtMensaje.setText("");
                 }
             }
         });
     }
 
-    private void obtenerToken() {
+    private void obtenerToken(final String mensaje) {
         final String url = "http://ec2-54-245-18-174.us-west-2.compute.amazonaws.com/" +
                 "Cicerone/PHP/Guia/obtenerToken.php?id="+idDestinatario;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
@@ -212,9 +214,8 @@ public class ChatActivity extends AppCompatActivity {
                         try {
                             JSONObject jsonObject = response.getJSONObject(0);
                             if (jsonObject.getString("success").equals("true")) {
-                                mandarNotificacion(jsonObject.getString("token"));
-                            }else {
-                                etxtMensaje.setText("");
+                                mandarNotificacion(jsonObject.getString("token"),
+                                        mensaje);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -230,15 +231,15 @@ public class ChatActivity extends AppCompatActivity {
         queue.add(jsonArrayRequest);
     }
 
-    private void mandarNotificacion(String token) throws JSONException {
+    private void mandarNotificacion(String token, String mensaje) throws JSONException {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JSONObject mainObj = new JSONObject();
         mainObj.put("to", token);
         Log.d("NOTICIAS","notificacion token:"+token+"\n");
         JSONObject notificationObj = new JSONObject();
-        notificationObj.put("title", "Nuevo mensaje de " + Global.getObject().getNombre());
-        notificationObj.put("body", etxtMensaje.getText().toString());
+        notificationObj.put("title", "Nuevo mensaje del Guia " + Global.getObject().getNombre());
+        notificationObj.put("body", mensaje);
         mainObj.put("notification", notificationObj);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Url,
@@ -262,7 +263,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         };
         requestQueue.add(request);
-        etxtMensaje.setText("");
     }
 
     private void recycleConfiguration() {
