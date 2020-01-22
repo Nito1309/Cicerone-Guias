@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
             @Override
             public void onSuccess(InstanceIdResult instanceIdResult) {
-                Log.d("NOTICIAS","Token: "+ instanceIdResult.getToken());
+                Log.d("NOTICIAS","GUIA Token: "+ instanceIdResult.getToken());
                 consultaActualizarToken(id,instanceIdResult.getToken());
             }
         });

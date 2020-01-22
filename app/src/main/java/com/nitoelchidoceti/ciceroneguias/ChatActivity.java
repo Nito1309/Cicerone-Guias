@@ -41,6 +41,12 @@ import com.google.firebase.database.ServerValue;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.nitoelchidoceti.ciceroneguias.Adapters.AdapterMensajes;
 import com.nitoelchidoceti.ciceroneguias.Global.Global;
 import com.nitoelchidoceti.ciceroneguias.POJOS.MensajeEnviar;
@@ -78,13 +84,35 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        verifyStoragePermissions(this);
         nombreDestinatario = (String) getIntent().getSerializableExtra("Turista");
         idDestinatario = (String) getIntent().getSerializableExtra("ID");
         Toolbar toolbar = findViewById(R.id.toolbar_chat);
         setSupportActionBar(toolbar);
-        instancias();
+        peticionDePermisos();
     }
+    private void peticionDePermisos() {
+        Dexter.withActivity(this)
+                .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        instancias();
+                    }
 
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+                        Toast.makeText(ChatActivity.this,
+                                "Es necesario habilitar el permiso para poder enviar imagenes",
+                                Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                }).check();
+    }
     private void instancias() {
 
         etxtMensaje=findViewById(R.id.etxtMensaje);
@@ -105,12 +133,14 @@ public class ChatActivity extends AppCompatActivity {
         btnEnviarImagen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);//pedir obtener todos archivos
-                intent.setType("image/jpeg");//configurar para que solo sean fotos
-                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);//lo agregas al intent para enviar
-                //evaluar el resultado del intent (si se realizo correctamente)
-                startActivityForResult(Intent.createChooser(intent, "Selecciona una imagen"), PHOTO_SEND);//1 = imagen
+                if (ActivityCompat.checkSelfPermission(ChatActivity.this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);//pedir obtener todos archivos
+                    intent.setType("image/jpeg");//configurar para que solo sean fotos
+                    intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);//lo agregas al intent para enviar
+                    //evaluar el resultado del intent (si se realizo correctamente)
+                    startActivityForResult(Intent.createChooser(intent, "Selecciona una imagen"), PHOTO_SEND);//1 = imagen
+                }
             }
         });
     }
@@ -149,7 +179,7 @@ public class ChatActivity extends AppCompatActivity {
         if (requestCode == PHOTO_SEND && resultCode == RESULT_OK) {
             final ProgressDialog progressDialog = new ProgressDialog(ChatActivity.this);
             progressDialog.setTitle("Subiendo Imagen...");
-            progressDialog.setMessage("Por favor espere.");
+            progressDialog.setMessage("Por favor espere");
             progressDialog.setCancelable(false);
             progressDialog.show();
             Uri uri = data.getData();//subir la img a la db
@@ -236,7 +266,7 @@ public class ChatActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JSONObject mainObj = new JSONObject();
         mainObj.put("to", token);
-        Log.d("NOTICIAS","notificacion token:"+token+"\n");
+        Log.d("NOTICIAS","GUIA notificacion token:"+token+"\n");
         JSONObject notificationObj = new JSONObject();
         notificationObj.put("title", "Nuevo mensaje del Guia " + Global.getObject().getNombre());
         notificationObj.put("body", mensaje);

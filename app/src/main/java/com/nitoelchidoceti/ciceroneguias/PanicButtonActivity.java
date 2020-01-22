@@ -9,12 +9,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -24,6 +26,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +42,7 @@ import java.util.ArrayList;
 public class PanicButtonActivity extends AppCompatActivity {
 
     private TextView fila1Columna1,fila1Columna2,fila2Columna1,fila2Columna2,fila3Columna1,fila3Columna2;
+    private CardView fila1Columna1c,fila1Columna2c,fila2Columna1c,fila2Columna2c,fila3Columna1c,fila3Columna2c;
     private ArrayList<Boton> botones = new ArrayList<>();
 
     @Override
@@ -52,43 +61,44 @@ public class PanicButtonActivity extends AppCompatActivity {
     }
 
     private void onClicks() {
-        fila1Columna1.setOnClickListener(new View.OnClickListener() {
+        fila1Columna1c.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 makePhoneCall(botones.get(0));
             }
         });
-        fila1Columna2.setOnClickListener(new View.OnClickListener() {
+        fila1Columna2c.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 makePhoneCall(botones.get(1));
             }
         });
-        fila2Columna1.setOnClickListener(new View.OnClickListener() {
+        fila2Columna1c.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 makePhoneCall(botones.get(2));
             }
         });
 
-        fila2Columna2.setOnClickListener(new View.OnClickListener() {
+        fila2Columna2c.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 makePhoneCall(botones.get(3));
             }
         });
-        fila3Columna1.setOnClickListener(new View.OnClickListener() {
+        fila3Columna1c.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 makePhoneCall(botones.get(4));
             }
         });
-        fila3Columna2.setOnClickListener(new View.OnClickListener() {
+        fila3Columna2c.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 makePhoneCall(botones.get(5));
             }
         });
+
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
 
@@ -96,7 +106,6 @@ public class PanicButtonActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.CALL_PHONE}, 1);
 
         }
-
     }
 
     private void makePhoneCall(Boton button) {
@@ -106,10 +115,31 @@ public class PanicButtonActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(PanicButtonActivity.this,
                     new String[]{Manifest.permission.CALL_PHONE}, 1);
 
-        } else {
-            String dial = "tel:" + button.getTelefono();
-            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
         }
+        peticionDePermisos(button);
+    }
+    private void peticionDePermisos(final Boton button) {
+        Dexter.withActivity(this)
+                .withPermission(Manifest.permission.CALL_PHONE)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        String dial = "tel:" + button.getTelefono();
+                        startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+                        Toast.makeText(PanicButtonActivity.this,
+                                "Es necesario habilitar el permiso para poder llamar!",
+                                Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                }).check();
     }
 
     @Override
@@ -118,7 +148,7 @@ public class PanicButtonActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
             }else {
-                Toast.makeText(this, "No activaste el permiso :c", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Es necesario habilitar el permiso para poder llamar!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -132,6 +162,15 @@ public class PanicButtonActivity extends AppCompatActivity {
         fila2Columna2 = findViewById(R.id.columna2Fila2);
         fila3Columna1 = findViewById(R.id.columna1Fila3);
         fila3Columna2 = findViewById(R.id.columna2Fila3);
+        //card views
+
+        fila1Columna1c= findViewById(R.id.columna1Fila1c);
+        fila1Columna2c= findViewById(R.id.columna2Fila1c);
+        fila2Columna1c = findViewById(R.id.columna1Fila2c);
+        fila2Columna2c = findViewById(R.id.columna2Fila2c);
+        fila3Columna1c = findViewById(R.id.columna1Fila3c);
+        fila3Columna2c = findViewById(R.id.columna2Fila3c);
+        onClicks();
     }
 
     private void obtenerBotones() {
@@ -181,7 +220,6 @@ public class PanicButtonActivity extends AppCompatActivity {
         fila3Columna1.setText(objeto.getString("Nombre"));
         objeto = response.getJSONObject(5);
         fila3Columna2.setText(objeto.getString("Nombre"));
-        onClicks();
     }
 
     @Override

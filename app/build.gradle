@@ -42,6 +42,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:20.0.0'
     //diseño bonito para chat
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
+    //Peticion de permisos
+    implementation 'com.karumi:dexter:5.0.0'
 
     //Enviar Correo
     implementation files('libs/activation.jar')

@@ -51,6 +51,7 @@
 
         <!-- Columna 1 Fila 1-->
         <androidx.cardview.widget.CardView
+            android:id="@+id/columna1Fila1c"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_columnWeight="1"
@@ -87,6 +88,7 @@
 
         <!-- columna 2 Fila 1-->
         <androidx.cardview.widget.CardView
+            android:id="@+id/columna2Fila1c"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginRight="16dp"
@@ -123,6 +125,7 @@
         <!-- columna 1 Fila 2-->
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/columna1Fila2c"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginRight="16dp"
@@ -160,6 +163,7 @@
 
         <!-- columna 2 Fila 2-->
         <androidx.cardview.widget.CardView
+            android:id="@+id/columna2Fila2c"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginRight="16dp"
@@ -196,6 +200,7 @@
         <!-- columna 1 Fila 3-->
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/columna1Fila3c"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginRight="16dp"
@@ -232,6 +237,7 @@
 
         <!-- columna 2 Fila 3-->
         <androidx.cardview.widget.CardView
+            android:id="@+id/columna2Fila3c"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginRight="16dp"

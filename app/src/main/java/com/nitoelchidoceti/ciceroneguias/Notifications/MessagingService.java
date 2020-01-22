@@ -25,15 +25,16 @@ public class MessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+        Log.d(TAG, "GUIA NUEVA NOTIFICACION");
 
         String from = remoteMessage.getFrom();
-        Log.d(TAG, "Mensaje recibido de : " + from);
+        Log.d(TAG, "GUIA Mensaje recibido de : " + from);
         if (remoteMessage.getNotification() != null){
-            Log.d(TAG, "Notificación: " + remoteMessage.getNotification().getBody());
+            Log.d(TAG, "GUIA Notificación: " + remoteMessage.getNotification().getBody());
             mostrarNotificacion(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
         }
         if (remoteMessage.getData().size() > 0){
-            Log.d(TAG,"Data: " + remoteMessage.getData());
+            Log.d(TAG,"GUIA Data: " + remoteMessage.getData());
         }
     }
 
@@ -62,7 +63,7 @@ public class MessagingService extends FirebaseMessagingService {
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,
                 "MyChannel")
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.drawable.ic_guides)
                 .setContentTitle(title)
                 .setAutoCancel(true)
                 .setContentText(body)
@@ -77,6 +78,6 @@ public class MessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
-        Log.d(TAG, "Token: " + s);
+        Log.d(TAG, "GUIA Token: " + s);
     }
 }
