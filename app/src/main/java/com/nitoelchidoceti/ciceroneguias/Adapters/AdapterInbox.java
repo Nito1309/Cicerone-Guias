@@ -66,7 +66,6 @@ public class AdapterInbox extends RecyclerView.Adapter<AdapterInbox.HolderMensaj
         }
 
         holder.getMensaje().setText(mensajes.get(position).getMensaje());
-        //Glide.with(context).load(mensajes.get(position).get.into(holder.imgMensaje);
         Long codigoHora = mensajes.get(position).getHora();
         Date date = new Date(codigoHora);
         PrettyTime prettyTime = new PrettyTime(new Date(), Locale.getDefault());

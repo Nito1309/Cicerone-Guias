@@ -1,13 +1,15 @@
 package com.nitoelchidoceti.ciceroneguias.POJOS;
 
 public class PojoReservacion {
-    private String fecha, nombre, registroTurista, telefono;
+    private String fecha, nombre, registroTurista, telefono,pagado;
 
-    public PojoReservacion(String fecha, String nombre, String registroTurista, String telefono) {
+    public PojoReservacion(String fecha, String nombre, String registroTurista, String telefono,String pagado) {
         this.fecha = fecha;
         this.nombre = nombre;
         this.registroTurista = registroTurista;
         this.telefono = telefono;
+        this.pagado = pagado;
+
     }
 
     public String getNombre() {
@@ -40,5 +42,13 @@ public class PojoReservacion {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public String getPagado() {
+        return pagado;
+    }
+
+    public void setPagado(String pagado) {
+        this.pagado = pagado;
     }
 }

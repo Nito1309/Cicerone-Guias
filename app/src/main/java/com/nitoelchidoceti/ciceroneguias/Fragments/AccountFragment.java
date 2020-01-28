@@ -44,6 +44,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class AccountFragment extends Fragment {
@@ -105,7 +106,6 @@ public class AccountFragment extends Fragment {
         pojoGuia = new PojoGuia();
         //POJO GUIA
         pojoGuia.setId(String.valueOf(Global.getObject().getId()));
-
         consultaTitulos();
 
     }
@@ -113,7 +113,7 @@ public class AccountFragment extends Fragment {
     private void cerrarSesion() {
         if (AccessToken.getCurrentAccessToken() == null) {
             Intent launchLoginFromAccount = new Intent(view.getContext(),LoginActivity.class);
-            getActivity().finish();
+            Objects.requireNonNull(getActivity()).finish();
             startActivity(launchLoginFromAccount);
             // already logged out
         }else {
@@ -146,7 +146,6 @@ public class AccountFragment extends Fragment {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
-
                             obtenerImagenes();
                             consultaComentarios();
                             calcularCalificacion();
@@ -199,7 +198,7 @@ public class AccountFragment extends Fragment {
                         try {
                             llenarImagenes(response);
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -224,10 +223,11 @@ public class AccountFragment extends Fragment {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
+
                             agregarTitulosAlPojo(response);
                             consultaIdiomas();
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -252,7 +252,7 @@ public class AccountFragment extends Fragment {
                             agregarIdiomasAlPojo(response);
                             obtenerInfGuia();
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
 
                     }

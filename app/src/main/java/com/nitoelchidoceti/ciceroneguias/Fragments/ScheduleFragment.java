@@ -97,12 +97,13 @@ public class ScheduleFragment extends Fragment {
 
             JSONObject objeto;
             objeto = response.getJSONObject(i);
-            String fecha,nombre,telefono,registro;
+            String fecha,nombre,telefono,registro,pagado;
             fecha = objeto.getString("Fecha");
             nombre = objeto.getString("Nombre");
             telefono = objeto.getString("Telefono");
             registro= objeto.getString("PK_Registro");
-            PojoReservacion reservacion = new PojoReservacion(fecha,nombre,registro,telefono) ;
+            pagado = objeto.getString("Pagado");
+            PojoReservacion reservacion = new PojoReservacion(fecha,nombre,registro,telefono,pagado) ;
             reservaciones.add(reservacion);
         }
         adapterDeReservaciones = new AdapterDeReservaciones(reservaciones, view.getContext(), new AdapterDeReservaciones.OnItemClickListener() {

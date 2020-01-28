@@ -78,7 +78,13 @@ public class AdapterDeReservaciones extends RecyclerView.Adapter<AdapterDeReserv
             String fecha = reservacion.getFecha().substring(0,10);
             String hora = reservacion.getFecha().substring(10,16);
             String finalDate = darFormatoFecha(fecha);
-            Fecha.setText(finalDate +" at "+ hora+" hrs ");
+            if (reservacion.getPagado().equals("1")){
+                Fecha.setText(finalDate +" at "+ hora+" hrs \n"+"Pagado: Si");
+            }else {
+                Fecha.setText(finalDate +" at "+ hora+" hrs \n"+"Pagado: No");
+
+            }
+
             Titulo.setText("Reservación con "+ reservacion.getNombre());
             threePoints = itemView.findViewById(R.id.btnThreePoints);
 
